@@ -11,14 +11,29 @@ datasource db {
 }
 
 model BirthdayPerson {
-  id        Int       @id @default(autoincrement())
-  name      String
-  birthday  Birthday  @relation(fields: [birthdayId], references: [id])
-  birthdayId Int      @unique
+  id              Int      @id @default(autoincrement())
+  name            String
+  birthDate       DateTime
+  notes           String?
+  category        Category @relation(fields: [categoryId], references: [id])
+  categoryId      Int
+  reminderEnabled Boolean  @default(true)
+  reminderDays    Int      @default(7)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
-model Birthday {
-  id        Int            @id @default(autoincrement())
-  date      DateTime
-  person    BirthdayPerson?
+model Category {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  birthdayPersons BirthdayPerson[]
 }
+
+// Uncomment the following model when you're ready to implement user authentication
+// model User {
+//   id        Int      @id @default(autoincrement())
+//   email     String   @unique
+//   name      String?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }

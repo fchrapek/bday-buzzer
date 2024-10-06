@@ -4,48 +4,34 @@ import prisma from 'lib/prisma'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { name, date } = body
+    const { name, birthDate, notes, categoryId, reminderEnabled, reminderDays } = body
 
-    console.log('Received request body:', body)
-
-    if (!name || !date) {
-      console.log('Missing required fields')
+    if (!name || !birthDate || !categoryId) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Create the Birthday first
-    const birthday = await prisma.birthday.create({
-      data: { 
-        date: new Date(date)
-      }
+    // Check if the category exists
+    const category = await prisma.category.findUnique({
+      where: { id: parseInt(categoryId) }
     })
 
-    // Check if a person with this name already exists
-    let person = await prisma.birthdayPerson.findFirst({
-      where: { name }
-    })
-
-    if (person) {
-      // If person exists, update their birthday
-      person = await prisma.birthdayPerson.update({
-        where: { id: person.id },
-        data: { birthdayId: birthday.id },
-        include: { birthday: true }
-      })
-    } else {
-      // If person doesn't exist, create a new one
-      person = await prisma.birthdayPerson.create({
-        data: { 
-          name,
-          birthdayId: birthday.id
-        },
-        include: { birthday: true }
-      })
+    if (!category) {
+      return NextResponse.json({ error: 'Invalid category' }, { status: 400 })
     }
 
-    console.log('Created/Updated person with birthday:', person)
+    const newBirthday = await prisma.birthdayPerson.create({
+      data: { 
+        name,
+        birthDate: new Date(birthDate),
+        notes,
+        categoryId: parseInt(categoryId),
+        reminderEnabled,
+        reminderDays
+      },
+      include: { category: true }
+    })
 
-    return NextResponse.json(person, { status: 201 })
+    return NextResponse.json(newBirthday, { status: 201 })
   } catch (error) {
     console.error('Failed to create birthday entry:', error)
     return NextResponse.json({ error: 'Failed to create birthday entry' }, { status: 500 })
@@ -54,10 +40,10 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const people = await prisma.birthdayPerson.findMany({
-      include: { birthday: true }
+    const birthdays = await prisma.birthdayPerson.findMany({
+      include: { category: true }
     })
-    return NextResponse.json(people)
+    return NextResponse.json(birthdays)
   } catch (error) {
     console.error('Failed to fetch birthdays:', error)
     return NextResponse.json({ error: 'Failed to fetch birthdays' }, { status: 500 })
