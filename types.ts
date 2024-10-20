@@ -3,24 +3,15 @@ export interface Category {
   name: string;
 }
 
-export interface BirthdayFormData {
+export type Birthday = {
+  id: number;
   name: string;
-  birthDate: string;
-  notes: string;
+  birthDate: string; // or Date, depending on how you want to handle it
+  notes: string | null;
   categoryId: number;
+  category?: { name: string }; // If you're including the category name in the query
   reminderEnabled: boolean;
   reminderDays: number;
-}
-
-export interface Birthday extends BirthdayFormData {
-  id: number;
-  category: Category;
-}
-
-export interface BirthdayFormProps {
-  onAddBirthday: (birthday: Birthday) => void;
-}
-
-export interface BirthdayListProps {
-  birthdays: Birthday[];
-}
+  createdAt: string; // or Date
+  updatedAt: string; // or Date
+};
