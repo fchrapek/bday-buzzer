@@ -8,7 +8,7 @@ type ApiResponse<T> = {
   error: string;
 };
 
-export async function fetchApi<T>(url: string, method: 'GET' | 'POST' = 'GET', body?: any): Promise<ApiResponse<T>> {
+export async function fetchApi<T>(url: string, method: 'GET' | 'DELETE' | 'POST' | 'PUT' = 'GET', body?: any): Promise<ApiResponse<T>> {
   try {
     const options: RequestInit = {
       method,
@@ -17,7 +17,7 @@ export async function fetchApi<T>(url: string, method: 'GET' | 'POST' = 'GET', b
       },
     };
 
-    if (body && method === 'POST') {
+    if (body && (method === 'POST' || method === 'DELETE' || method === 'PUT')) {
       options.body = JSON.stringify(body);
     }
 

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Input, Select, Textarea, Button, Checkbox } from "./ui";
 import { Category, Birthday } from "@/types";
-import { CATEGORIES } from "@/constants";
+// import { CATEGORIES } from "@/constants";
+import BirthdayFormFields from "./BirthdayFormFields";
 import { fetchApi, isErrorResponse } from "@/lib/api-helpers";
 
 export interface BirthdayFormProps {
@@ -82,62 +83,7 @@ export default function BirthdayForm({ onAddBirthday }: BirthdayFormProps) {
   return (
     <form onSubmit={createBirthday} className="space-y-4 mb-8">
       <h2 className="text-xl font-semibold mb-2">Add Birthday Reminder</h2>
-      <Input
-        label="Name"
-        id="name"
-        name="name"
-        type="text"
-        value={formData.name}
-        onChange={handleInputChange}
-        required
-      />
-      <Input
-        label="Date"
-        id="birthDate"
-        name="birthDate"
-        type="date"
-        value={formData.birthDate}
-        onChange={handleInputChange}
-        required
-      />
-      <Select
-        label="Category"
-        id="categoryId"
-        name="categoryId"
-        value={formData.categoryId}
-        onChange={handleInputChange}
-        required
-        options={CATEGORIES.map((category: Category) => ({
-          value: category.id,
-          label: category.name,
-        }))}
-      />
-      <Textarea
-        label="Notes"
-        id="notes"
-        name="notes"
-        value={formData.notes}
-        onChange={handleInputChange}
-      />
-      <Checkbox
-        label="Enable reminder"
-        name="reminderEnabled"
-        checked={formData.reminderEnabled}
-        onChange={handleInputChange}
-      />
-
-      {formData.reminderEnabled && (
-        <Input
-          label="Remind me (days before)"
-          id="reminderDays"
-          name="reminderDays"
-          type="number"
-          value={formData.reminderDays.toString()}
-          onChange={handleInputChange}
-          min="1"
-          max="30"
-        />
-      )}
+      <BirthdayFormFields formData={formData} onChange={handleInputChange} />
       <Button type="submit" isLoading={isSubmitting}>
         Add Birthday
       </Button>
