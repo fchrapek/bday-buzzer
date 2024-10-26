@@ -5,7 +5,7 @@ import { fetchApi, isErrorResponse } from "@/lib/api-helpers";
 import BirthdayForm from "./components/BirthdayForm";
 import BirthdayList from "./components/BirthdayList";
 import { Birthday } from "types";
-
+import { logout } from "./logout/action";
 export default function Home() {
   const [birthdays, setBirthdays] = useState<Birthday[]>([]);
 
@@ -29,6 +29,7 @@ export default function Home() {
 
   return (
     <main className="p-4">
+      <button onClick={() => logout()}>Log out</button>
       <h1 className="text-2xl font-bold mb-4">Birthday Reminders</h1>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="md:w-1/2">
