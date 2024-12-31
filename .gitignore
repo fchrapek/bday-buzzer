@@ -21,3 +21,42 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Laravel & PHP
+.php-cs-fixer.cache
+.php_cs.cache
+.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+
+# Dependencies
+/public/js
+/public/css
+/public/mix-manifest.json
+
+# Testing
+/coverage
+.phpunit.cache
+
+# Environment
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# React/Node
+*.log
+.next
+dist
+build
+coverage
+.cache
+
+# Editor directories and files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
